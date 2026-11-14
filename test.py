@@ -107,4 +107,23 @@ def test_order_line():
     # Display Order 1
     order1.display_order()
 
-test_order_line()
+def show_product_details(product: Product) -> None:
+    product.display_information()
+    print(product.get_fulfilment_info())
+
+def test_lsp():
+    supplier1 = Supplier("S001", "ABC Company", "abc@gmail.com")
+
+    physical_product = PhysicalProduct(
+        "P001", "Keyboard", 50.0, 10, supplier1, 0.5
+    )
+
+    digital_product = DigitalProduct(
+        "D001", "Python Ebook", 20.0, 5, supplier1, 10
+    )
+
+    show_product_details(physical_product)
+    show_product_details(digital_product)
+
+##test_order_line()
+test_lsp()
