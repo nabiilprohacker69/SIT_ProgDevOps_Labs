@@ -89,29 +89,22 @@ def test_add_remove_product():
     print("Same Product object:",
           inventory_b.search_product("P001") is product1)
 
-def test_order():
-
+def test_order_line():
+    # Create supplier
     supplier1 = Supplier("S001", "ABC Company", "abc@gmail.com")
 
-    product1 = PhysicalProduct("P001", "Keyboard", 50.0, 10, supplier1, 5.0)
-    product2 = DigitalProduct("D001", "Python Ebook", 20.0, 5, supplier1, 5.0)
-    product3 = PhysicalProduct("P002", "Mouse", 30.0, 15, supplier1, 5.0)
-    product4 = DigitalProduct("D002", "Java Ebook", 25.0, 8, supplier1, 5.0)
+    # Create products
+    product1 = PhysicalProduct("P001", "Keyboard", 50.0, 10, supplier1, 0.5)
+    product2 = PhysicalProduct("P002", "Mouse", 20.0, 15, supplier1, 0.2)
 
-    order_line1 = OrderLine(product1)
-    order_line2 = OrderLine(product2)
-    order_line3 = OrderLine(product3)
-    order_line4 = OrderLine(product4)
-    print("===== ORDER TEST =====")
-    print("Product 1:")
-    order_line1.display_order_line()
-    print("Product 2:")
-    order_line2.display_order_line()
-    print("Product 3:")
-    order_line3.display_order_line()
-    print("Product 4:")
-    order_line4.display_order_line()
+    # Create Order 1
+    order1 = Order("O001")
 
-#test_supplier_display_information()
-#test_add_remove_product()
-test_order()
+    # Add two products
+    order1.add_order_line(product1, 2)
+    order1.add_order_line(product2, 3)
+
+    # Display Order 1
+    order1.display_order()
+
+test_order_line()
