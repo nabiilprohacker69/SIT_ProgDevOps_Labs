@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
+
+from supplier import Supplier
 ##responsible for product data, i.e. updating stock and displaying product information.
 
 class Product(ABC):
 
-    def __init__(self, product_id, name, price, stock):
-        self.__product_id = product_id
-        self.__name = name
-        self.__price = float(price)
-        self.__stock = int(stock)
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier):
+        self.__product_id=str(product_id)
+        self.__name=str(name)
+        self.__price=float(price)
+        self.__stock=int(stock) 
+        self.supplier: Supplier = supplier ##tells python and ME that supplier is an OBJECT also its PUBLIC
 
     # read-only access: other classes can look at the data but cannot change it directly
     @property

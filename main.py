@@ -4,6 +4,7 @@ from product import Product
 from inventory import Inventory
 from physicalproduct import PhysicalProduct
 from digitalproduct import DigitalProduct
+from supplier import Supplier
 
 FILENAME = "inventory.json"
 
@@ -18,13 +19,15 @@ def load_inventory(inventory):
         name = record["Name"]
         price = record["Price"]
         stock = record["Stock"]
+        supplier = Supplier(record["Supplier ID"], record["Supplier Name"], record["Supplier Contact"])  # Assuming supplier information is stored in the record
+
 
         if record["Type"] == "P":
             weight = record["Weight"]
-            product = PhysicalProduct(product_id, name, price, stock, weight)
+            product = PhysicalProduct(product_id, name, price, stock, supplier, weight)
         elif record["Type"] == "D":
             file_size = record["File Size"]
-            product = DigitalProduct(product_id, name, price, stock, file_size)
+            product = DigitalProduct(product_id, name, price, stock, supplier, file_size)
         else:
             continue  # skip unknown product types
 
@@ -40,6 +43,7 @@ def save_inventory(inventory):
             "Name": product.name,
             "Price": product.price,
             "Stock": product.stock
+            "S
         }
 
         if isinstance(product, PhysicalProduct):
