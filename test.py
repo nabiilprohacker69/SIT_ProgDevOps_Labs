@@ -22,3 +22,4 @@ def test_supplier_display_information():
     # Display supplier through DigitalProduct
     digital_product.supplier.display_information()
 
+test_supplier_display_information()

@@ -12,6 +12,7 @@ FILENAME = "inventory.json"
 ## ---------- file handling (for now it lives in the main program) ----------
 
 def load_inventory(inventory):
+    supplier1 = Supplier("S001", "ABC Company", "abc@company.com")
     with open(FILENAME, "r") as file:
         records = json.load(file)
     for record in records:
@@ -19,15 +20,18 @@ def load_inventory(inventory):
         name = record["Name"]
         price = record["Price"]
         stock = record["Stock"]
-        supplier = Supplier(record["Supplier ID"], record["Supplier Name"], record["Supplier Contact"])  # Assuming supplier information is stored in the record
 
+        supplier_id = record["Supplier ID"]
+        supplier_name = record["Supplier Name"]
+        supplier_email = record["Supplier Email"]
+        supplier1 = Supplier(supplier_id, supplier_name, supplier_email)
 
         if record["Type"] == "P":
             weight = record["Weight"]
-            product = PhysicalProduct(product_id, name, price, stock, supplier, weight)
+            product = PhysicalProduct(product_id, name, price, stock, supplier1, weight)
         elif record["Type"] == "D":
             file_size = record["File Size"]
-            product = DigitalProduct(product_id, name, price, stock, supplier, file_size)
+            product = DigitalProduct(product_id, name, price, stock, supplier1, file_size)
         else:
             continue  # skip unknown product types
 
@@ -42,8 +46,10 @@ def save_inventory(inventory):
             "ID": product.product_id,
             "Name": product.name,
             "Price": product.price,
-            "Stock": product.stock
-            "S
+            "Stock": product.stock,
+            "Supplier ID": product.supplier.supplier_id,
+            "Supplier Name": product.supplier.supplier_name,
+            "Supplier Email": product.supplier.supplier_email
         }
 
         if isinstance(product, PhysicalProduct):
@@ -80,9 +86,10 @@ def data_representation(inventory):
     print("1. Display All Products")
     print("2. Add Product")
     print("3. Update Product")
-    print("4. Search Product")
-    print("5. Save Inventory")
-    print("6. Exit")
+    print("4. Remove Product")
+    print("5. Search Product")
+    print("6. Save Inventory")
+    print("7. Exit")
     print("---------------------------------\n")
 
 
@@ -122,13 +129,14 @@ def option_2(inventory):
     product_name = input("Product Name: ")
     product_price = ask_price("Price: ")
     product_stock = ask_whole_number("Stock Quantity: ")
+    supplier1 = Supplier("S001", "ABC Company", "abc@company.com")
 
     if product_type == "P":
         product_weight = ask_whole_number("Weight (kg): ")
-        product = PhysicalProduct(product_id, product_name, product_price, product_stock, product_weight)
+        product = PhysicalProduct(product_id, product_name, product_price, product_stock, supplier1, product_weight)
     else:
         product_file_size = ask_whole_number("File Size (MB): ")
-        product = DigitalProduct(product_id, product_name, product_price, product_stock, product_file_size)
+        product = DigitalProduct(product_id, product_name, product_price, product_stock, supplier1, product_file_size)
 
     if inventory.add_product(product):
         print("Product added successfully.\n")
@@ -147,8 +155,18 @@ def option_3(inventory):
     print("Stock updated successfully!\n")
     return True
 
-
 def option_4(inventory):
+    print("Remove Product")
+    product_id = input("Enter Product ID: ")
+    product = inventory.search_product(product_id)
+    if product is None:
+            print("Product ID not found.\n")
+            return False
+    inventory.remove_product(product_id)
+    print("Product removed successfully.\n")
+    return True
+
+def option_5(inventory):
     print("Search Product")
     product_id = input("Enter Product ID: ")
     product = inventory.search_product(product_id)
@@ -161,7 +179,7 @@ def option_4(inventory):
         print("---------------------------------\n")
 
 
-def option_5(inventory):
+def option_6(inventory):
     print("Saving Inventory...")
     save_inventory(inventory)
     print("Inventory saved successfully.\n")
@@ -188,12 +206,14 @@ def main():
             option_4(inventory)
         elif user_input == "5":
             option_5(inventory)
-            unsaved_changes = False
         elif user_input == "6":
+            option_6(inventory)
+            unsaved_changes = False
+        elif user_input == "7":
             if unsaved_changes:
                 answer = input("You have unsaved changes. Save before exit? (y/n): ")
                 if answer.strip().lower() == "y":
-                    option_5(inventory)
+                    option_6(inventory)
             print("Thank you for using Inventory Management System.\nProgram terminated.")
             break
         else:

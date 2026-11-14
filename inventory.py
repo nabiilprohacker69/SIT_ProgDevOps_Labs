@@ -13,6 +13,13 @@ class Inventory:
         self.__products.append(product)
         return True
 
+    def remove_product(self, product_id):
+        product = self.search_product(product_id)
+        if product is None:
+            return False
+        self.__products.remove(product)
+        return True
+
     def search_product(self, product_id):
         for product in self.__products:
             if product.product_id == product_id:

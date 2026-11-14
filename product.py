@@ -38,4 +38,4 @@ class Product(ABC):
 
     @abstractmethod ##cant call product display information
     def display_information(self):
-        print(f"ID: {self.__product_id} | Name: {self.__name} | Price: ${self.__price:.2f} | Stock: {self.__stock} |  ",end="")
+        print(f"ID: {self.__product_id} | Name: {self.__name} | Price: ${self.__price:.2f} | Stock: {self.__stock} |  Supplier ID: {self.supplier.supplier_id}  |  ",end="")
