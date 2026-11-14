@@ -2,31 +2,37 @@
     {
         "ID": "P001",
         "Name": "Laptop",
-        "Price": "$1200",
+        "Price": 1200.0,
         "Stock": 50
     },
     {
         "ID": "P002",
         "Name": "Mouse",
-        "Price": "$25.50",
+        "Price": 25.5,
         "Stock": 30
     },
     {
         "ID": "P003",
         "Name": "Keyboard",
-        "Price": "$45.00",
+        "Price": 45.0,
         "Stock": 21
     },
     {
         "ID": "P004",
         "Name": "Keyboard",
-        "Price": "$50.00",
+        "Price": 50.0,
         "Stock": 20
     },
     {
         "ID": "P005",
         "Name": "Airpods",
-        "Price": "$200.00",
+        "Price": 200.0,
         "Stock": 22
+    },
+    {
+        "ID": "P006",
+        "Name": "Iphone",
+        "Price": 200.0,
+        "Stock": 23
     }
 ]
