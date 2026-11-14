@@ -3,6 +3,8 @@ from supplier import Supplier
 from digitalproduct import DigitalProduct
 from physicalproduct import PhysicalProduct
 from inventory import Inventory
+from orderline import OrderLine
+from order import Order
 
 
 def test_supplier_display_information():
@@ -86,6 +88,30 @@ def test_add_remove_product():
 
     print("Same Product object:",
           inventory_b.search_product("P001") is product1)
-    
-test_supplier_display_information()
-test_add_remove_product()
+
+def test_order():
+
+    supplier1 = Supplier("S001", "ABC Company", "abc@gmail.com")
+
+    product1 = PhysicalProduct("P001", "Keyboard", 50.0, 10, supplier1, 5.0)
+    product2 = DigitalProduct("D001", "Python Ebook", 20.0, 5, supplier1, 5.0)
+    product3 = PhysicalProduct("P002", "Mouse", 30.0, 15, supplier1, 5.0)
+    product4 = DigitalProduct("D002", "Java Ebook", 25.0, 8, supplier1, 5.0)
+
+    order_line1 = OrderLine(product1)
+    order_line2 = OrderLine(product2)
+    order_line3 = OrderLine(product3)
+    order_line4 = OrderLine(product4)
+    print("===== ORDER TEST =====")
+    print("Product 1:")
+    order_line1.display_order_line()
+    print("Product 2:")
+    order_line2.display_order_line()
+    print("Product 3:")
+    order_line3.display_order_line()
+    print("Product 4:")
+    order_line4.display_order_line()
+
+#test_supplier_display_information()
+#test_add_remove_product()
+test_order()
