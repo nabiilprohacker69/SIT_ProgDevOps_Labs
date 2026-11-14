@@ -2,6 +2,8 @@ import json
 import os
 from product import Product
 from inventory import Inventory
+from physicalproduct import PhysicalProduct
+from digitalproduct import DigitalProduct
 
 FILENAME = "inventory.json"
 
@@ -12,19 +14,44 @@ def load_inventory(inventory):
     with open(FILENAME, "r") as file:
         records = json.load(file)
     for record in records:
-        price = float(str(record["Price"]).replace("$", ""))   # older files stored prices like "$1200"
-        inventory.add_product(Product(record["ID"], record["Name"], price, record["Stock"]))
+        product_id = record["ID"]
+        name = record["Name"]
+        price = record["Price"]
+        stock = record["Stock"]
+
+        if record["Type"] == "P":
+            weight = record["Weight"]
+            product = PhysicalProduct(product_id, name, price, stock, weight)
+        elif record["Type"] == "D":
+            file_size = record["File Size"]
+            product = DigitalProduct(product_id, name, price, stock, file_size)
+        else:
+            continue  # skip unknown product types
+
+        inventory.add_product(product)
 
 
 def save_inventory(inventory):
     records = []
+
     for product in inventory.get_all_products():
-        records.append({
+        record = {
             "ID": product.product_id,
             "Name": product.name,
             "Price": product.price,
             "Stock": product.stock
-        })
+        }
+
+        if isinstance(product, PhysicalProduct):
+            record["Type"] = "P"
+            record["Weight"] = product.weight
+
+        elif isinstance(product, DigitalProduct):
+            record["Type"] = "D"
+            record["File Size"] = product.file_size
+
+        records.append(record)
+
     with open(FILENAME, "w") as file:
         json.dump(records, file, indent=4)
 
@@ -42,9 +69,6 @@ def data_representation(inventory):
         print("Inventory loaded successfully.\n")
     else:
         print("inventory.json not found. Creating a new inventory file...")
-        inventory.add_product(Product("P001", "Laptop", 1200.00, 50))
-        inventory.add_product(Product("P002", "Mouse", 25.50, 30))
-        inventory.add_product(Product("P003", "Keyboard", 45.00, 20))
         save_inventory(inventory)
         print("New inventory file created successfully.\n")
 
@@ -79,17 +103,32 @@ def ask_price(prompt):
 
 
 def option_2(inventory):
-    print("Add New Product")
+    print("Add New Product, (P)hysical or (D)igital?")
+    product_type = input("Enter type (P/D): ").strip().upper()
+
+    if product_type not in ("P", "D"):
+        print("Invalid product type.\n")
+        return False
+
     product_id = input("Product ID: ")
+    if inventory.search_product(product_id) is not None:
+        print("Product ID already exists.\n")
+        return False
+    
     product_name = input("Product Name: ")
     product_price = ask_price("Price: ")
     product_stock = ask_whole_number("Stock Quantity: ")
-    product = Product(product_id, product_name, product_price, product_stock)
+
+    if product_type == "P":
+        product_weight = ask_whole_number("Weight (kg): ")
+        product = PhysicalProduct(product_id, product_name, product_price, product_stock, product_weight)
+    else:
+        product_file_size = ask_whole_number("File Size (MB): ")
+        product = DigitalProduct(product_id, product_name, product_price, product_stock, product_file_size)
+
     if inventory.add_product(product):
         print("Product added successfully.\n")
         return True
-    print("Product ID already exists.\n")
-    return False
 
 
 def option_3(inventory):

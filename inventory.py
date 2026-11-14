@@ -1,6 +1,7 @@
 
 ##responsible for managing a collection of Product objects: add, search, update stock, display all
 
+
 class Inventory:
 
     def __init__(self):
@@ -31,4 +32,4 @@ class Inventory:
             product.display_information()
 
     def get_all_products(self):
-        return list(self.__products)            # a copy, so outside code can't change our list
+        return list(self.__products)      

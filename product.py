@@ -1,7 +1,7 @@
-
+from abc import ABC, abstractmethod
 ##responsible for product data, i.e. updating stock and displaying product information.
 
-class Product:
+class Product(ABC):
 
     def __init__(self, product_id, name, price, stock):
         self.__product_id = product_id
@@ -33,5 +33,6 @@ class Product:
         self.__stock = quantity
         return True
 
+    @abstractmethod ##cant call product display information
     def display_information(self):
-        print(f"ID: {self.__product_id} | Name: {self.__name} | Price: ${self.__price:.2f} | Stock: {self.__stock}")
+        print(f"ID: {self.__product_id} | Name: {self.__name} | Price: ${self.__price:.2f} | Stock: {self.__stock} |  ",end="")
