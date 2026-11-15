@@ -125,5 +125,7 @@ def test_lsp():
     show_product_details(physical_product)
     show_product_details(digital_product)
 
-##test_order_line()
+test_supplier_display_information()
+test_add_remove_product()
+test_order_line()
 test_lsp()
