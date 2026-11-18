@@ -5,6 +5,7 @@ from physicalproduct import PhysicalProduct
 from inventory import Inventory
 from orderline import OrderLine
 from order import Order
+from discount import PercentageDiscount, BulkDiscount
 
 
 def test_supplier_display_information():
@@ -91,21 +92,45 @@ def test_add_remove_product():
 
 def test_order_line():
     # Create supplier
+    print("test order line")
+
     supplier1 = Supplier("S001", "ABC Company", "abc@gmail.com")
 
     # Create products
     product1 = PhysicalProduct("P001", "Keyboard", 50.0, 10, supplier1, 0.5)
     product2 = PhysicalProduct("P002", "Mouse", 20.0, 15, supplier1, 0.2)
+    product3 = PhysicalProduct("P003", "FC26", 100.0, 100, supplier1, 0.5)
+    product4 = PhysicalProduct("P004", "GTA VI", 100.0, 200, supplier1, 0.2)
 
-    # Create Order 1
+    # Create Orders
     order1 = Order("O001")
+    order2 = Order("O002")
 
     # Add two products
     order1.add_order_line(product1, 2)
     order1.add_order_line(product2, 3)
+    order2.add_order_line(product3, 1)
+    order2.add_order_line(product4, 1)
 
-    # Display Order 1
+    # Display Orders with no discount
+    print("NO DISCOUNT: ")
     order1.display_order()
+    order2.display_order()
+
+    # Apply 10% discount on both orders and display
+    print("10% DISCOUNT: ")
+    order1.set_discount(PercentageDiscount(10))
+    order2.set_discount(PercentageDiscount(10))
+    order1.display_order()
+    order2.display_order()
+
+    # Apply bulk discount on both orders and display
+    print("BULK DISCOUNT: ")
+    order1.set_discount(BulkDiscount(200,30))
+    order2.set_discount(BulkDiscount(200,30))
+    order1.display_order()
+    order2.display_order()
+
 
 def show_product_details(product: Product) -> None:
     product.display_information()
@@ -125,7 +150,8 @@ def test_lsp():
     show_product_details(physical_product)
     show_product_details(digital_product)
 
-test_supplier_display_information()
-test_add_remove_product()
+
+#test_supplier_display_information()
+#test_add_remove_product()
 test_order_line()
-test_lsp()
+#test_lsp()
