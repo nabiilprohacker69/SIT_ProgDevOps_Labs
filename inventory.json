@@ -9,5 +9,16 @@
         "Supplier Email": "abc@company.com",
         "Type": "P",
         "Weight": 10.0
+    },
+    {
+        "ID": "D002",
+        "Name": "GTA VI",
+        "Price": 114.0,
+        "Stock": 100,
+        "Supplier ID": "S001",
+        "Supplier Name": "ABC Company",
+        "Supplier Email": "abc@company.com",
+        "Type": "D",
+        "File Size": 200.0
     }
 ]

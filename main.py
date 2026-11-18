@@ -6,6 +6,9 @@ from physicalproduct import PhysicalProduct
 from digitalproduct import DigitalProduct
 from supplier import Supplier
 from productfactory import ProductFactory
+from order import Order
+from orderline import OrderLine
+from discount import PercentageDiscount, BulkDiscount
 
 FILENAME = "inventory.json"
 
@@ -101,7 +104,8 @@ def data_representation(inventory):
     print("4. Remove Product")
     print("5. Search Product")
     print("6. Save Inventory")
-    print("7. Exit")
+    print("7. Create Order")
+    print("8. Exit")
     print("---------------------------------\n")
 
 
@@ -198,6 +202,39 @@ def option_6(inventory):
     save_inventory(inventory)
     print("Inventory saved successfully.\n")
 
+def option_7(inventory):
+    print("Create New Order")
+
+    order_id = input("Enter Order ID: ")
+    order = Order(order_id)
+
+    while True:
+        product_id = input("Enter Product ID: ")
+        product = inventory.search_product(product_id)
+
+        if product is None:
+            print("Product ID not found.")
+            continue
+
+        quantity = ask_whole_number("Enter quantity: ")
+
+        if quantity <= 0:
+            print("Quantity must be greater than zero.")
+            continue
+
+        order_line = OrderLine(product, quantity)
+        order.add_order_line(product, quantity)
+
+        answer = input("Add another product? (y/n): ")
+
+        if answer.strip().lower() != "y":
+            break
+
+    order.display_order()
+    order.set_discount(PercentageDiscount(10))
+    print(f"10% Discount applied: ${order.calculate_total():.2f}")
+    order.set_discount(BulkDiscount(200,50))
+    print(f"Bulk Discount applied (if elligible): ${order.calculate_total():.2f}")
 
 def main():
     inventory = Inventory()
@@ -224,6 +261,8 @@ def main():
             option_6(inventory)
             unsaved_changes = False
         elif user_input == "7":
+            option_7(inventory)
+        elif user_input == "8":
             if unsaved_changes:
                 answer = input("You have unsaved changes. Save before exit? (y/n): ")
                 if answer.strip().lower() == "y":
