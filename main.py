@@ -5,11 +5,23 @@ from inventory import Inventory
 from physicalproduct import PhysicalProduct
 from digitalproduct import DigitalProduct
 from supplier import Supplier
+from productfactory import ProductFactory
 
 FILENAME = "inventory.json"
 
 
 ## ---------- file handling (for now it lives in the main program) ----------
+
+def get_positive_float(prompt: str) -> float: 
+    while True: 
+        try: 
+            value = float(input(prompt)) 
+            if value <= 0: 
+                print("Please enter a number greater than zero.") 
+                continue 
+            return value 
+        except ValueError: 
+            print("Please enter a valid number, e.g. 12.50") 
 
 def load_inventory(inventory):
     supplier1 = Supplier("S001", "ABC Company", "abc@company.com")
@@ -27,11 +39,11 @@ def load_inventory(inventory):
         supplier1 = Supplier(supplier_id, supplier_name, supplier_email)
 
         if record["Type"] == "P":
-            weight = record["Weight"]
-            product = PhysicalProduct(product_id, name, price, stock, supplier1, weight)
+            extra_value = record["Weight"]
+            product = PhysicalProduct(product_id, name, price, stock, supplier1, extra_value)
         elif record["Type"] == "D":
-            file_size = record["File Size"]
-            product = DigitalProduct(product_id, name, price, stock, supplier1, file_size)
+            extra_value = record["File Size"]
+            product = DigitalProduct(product_id, name, price, stock, supplier1, extra_value)
         else:
             continue  # skip unknown product types
 
@@ -54,11 +66,11 @@ def save_inventory(inventory):
 
         if isinstance(product, PhysicalProduct):
             record["Type"] = "P"
-            record["Weight"] = product.weight
+            record["Weight"] = product.extra_value
 
         elif isinstance(product, DigitalProduct):
             record["Type"] = "D"
-            record["File Size"] = product.file_size
+            record["File Size"] = product.extra_value
 
         records.append(record)
 
@@ -127,16 +139,18 @@ def option_2(inventory):
         return False
     
     product_name = input("Product Name: ")
-    product_price = ask_price("Price: ")
+    product_price = get_positive_float("Price: ")
     product_stock = ask_whole_number("Stock Quantity: ")
     supplier1 = Supplier("S001", "ABC Company", "abc@company.com")
 
     if product_type == "P":
-        product_weight = ask_whole_number("Weight (kg): ")
-        product = PhysicalProduct(product_id, product_name, product_price, product_stock, supplier1, product_weight)
+        extra_value = ask_whole_number("Weight (kg): ")
+        factory_type="physical"
     else:
-        product_file_size = ask_whole_number("File Size (MB): ")
-        product = DigitalProduct(product_id, product_name, product_price, product_stock, supplier1, product_file_size)
+        extra_value = ask_whole_number("File Size (MB): ")
+        factory_type="digital"
+
+    product = ProductFactory.create(factory_type, product_id, product_name, product_price, product_stock, supplier1, extra_value)
 
     if inventory.add_product(product):
         print("Product added successfully.\n")

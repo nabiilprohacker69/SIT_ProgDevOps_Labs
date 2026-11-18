@@ -1,1 +1,13 @@
-[]
+[
+    {
+        "ID": "P001",
+        "Name": "cock",
+        "Price": 100.0,
+        "Stock": 200,
+        "Supplier ID": "S001",
+        "Supplier Name": "ABC Company",
+        "Supplier Email": "abc@company.com",
+        "Type": "P",
+        "Weight": 10.0
+    }
+]
